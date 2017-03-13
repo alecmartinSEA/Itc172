@@ -1,0 +1,526 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Community_AssistModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ContactKey" />
+          </Key>
+          <Property Name="ContactKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ContactTypeKey" Type="int" />
+          <Property Name="PersonKey" Type="int" />
+        </EntityType>
+        <EntityType Name="GrantRequest">
+          <Key>
+            <PropertyRef Name="GrantRequestKey" />
+          </Key>
+          <Property Name="GrantRequestKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrantRequestDate" Type="datetime" Nullable="false" />
+          <Property Name="PersonKey" Type="int" />
+          <Property Name="GrantTypeKey" Type="int" />
+          <Property Name="GrantRequestExplanation" Type="nvarchar" MaxLength="255" />
+          <Property Name="GrantRequestAmount" Type="money" />
+        </EntityType>
+        <EntityType Name="GrantReview">
+          <Key>
+            <PropertyRef Name="GrantReviewKey" />
+          </Key>
+          <Property Name="GrantReviewKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrantReviewDate" Type="datetime" Nullable="false" />
+          <Property Name="GrantRequestKey" Type="int" />
+          <Property Name="GrantRequestStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="GrantAllocationAmount" Type="money" />
+          <Property Name="EmployeeKey" Type="int" />
+        </EntityType>
+        <EntityType Name="GrantType">
+          <Key>
+            <PropertyRef Name="GrantTypeKey" />
+          </Key>
+          <Property Name="GrantTypeKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrantTypeName" Type="nvarchar" MaxLength="255" />
+          <Property Name="GrantTypeMaximum" Type="money" Nullable="false" />
+          <Property Name="GrantTypeLifetimeMaximum" Type="money" Nullable="false" />
+          <Property Name="GrantTypeDescription" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="LoginHistoryTable">
+          <Key>
+            <PropertyRef Name="LoginHistoryKey" />
+          </Key>
+          <Property Name="LoginHistoryKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonKey" Type="int" />
+          <Property Name="LoginTimeStamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonKey" />
+          </Key>
+          <Property Name="PersonKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonLastName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PersonFirstName" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonPassWord" Type="varbinary" MaxLength="500" />
+          <Property Name="PersonEntryDate" Type="datetime" Nullable="false" />
+          <Property Name="PersonPassWordSeed" Type="int" />
+        </EntityType>
+        <EntityType Name="PersonAddress">
+          <Key>
+            <PropertyRef Name="PersonAddressKey" />
+          </Key>
+          <Property Name="PersonAddressKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonAddressApt" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonAddressStreet" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonAddressCity" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonAddressState" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonAddressZip" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonKey" Type="int" />
+        </EntityType>
+        <Association Name="FK__Contact__PersonK__300424B4">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Contact" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRequ__Grant__34C8D9D1">
+          <End Role="GrantType" Type="Self.GrantType" Multiplicity="0..1" />
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GrantType">
+              <PropertyRef Name="GrantTypeKey" />
+            </Principal>
+            <Dependent Role="GrantRequest">
+              <PropertyRef Name="GrantTypeKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRequ__Perso__35BCFE0A">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="GrantRequest">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRevi__Grant__37A5467C">
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="0..1" />
+          <End Role="GrantReview" Type="Self.GrantReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GrantRequest">
+              <PropertyRef Name="GrantRequestKey" />
+            </Principal>
+            <Dependent Role="GrantReview">
+              <PropertyRef Name="GrantRequestKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LoginHist__Perso__3A81B327">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="LoginHistoryTable" Type="Self.LoginHistoryTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="LoginHistoryTable">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PersonAdd__Perso__3B75D760">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="PersonAddress" Type="Self.PersonAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="PersonAddress">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_Register" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lastname" Type="nvarchar" Mode="In" />
+          <Parameter Name="firstname" Type="nvarchar" Mode="In" />
+          <Parameter Name="email" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+          <Parameter Name="ApartmentNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street" Type="nvarchar" Mode="In" />
+          <Parameter Name="City" Type="nvarchar" Mode="In" />
+          <Parameter Name="State" Type="nchar" Mode="In" />
+          <Parameter Name="Zipcode" Type="nvarchar" Mode="In" />
+          <Parameter Name="HomePhone" Type="nvarchar" Mode="In" />
+          <Parameter Name="WorkPhone" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="Community_AssistModelStoreContainer">
+          <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GrantRequest" EntityType="Self.GrantRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GrantReview" EntityType="Self.GrantReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GrantType" EntityType="Self.GrantType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginHistoryTable" EntityType="Self.LoginHistoryTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonAddress" EntityType="Self.PersonAddress" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Contact__PersonK__300424B4" Association="Self.FK__Contact__PersonK__300424B4">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Contact" EntitySet="Contact" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRequ__Grant__34C8D9D1" Association="Self.FK__GrantRequ__Grant__34C8D9D1">
+            <End Role="GrantType" EntitySet="GrantType" />
+            <End Role="GrantRequest" EntitySet="GrantRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRequ__Perso__35BCFE0A" Association="Self.FK__GrantRequ__Perso__35BCFE0A">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="GrantRequest" EntitySet="GrantRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRevi__Grant__37A5467C" Association="Self.FK__GrantRevi__Grant__37A5467C">
+            <End Role="GrantRequest" EntitySet="GrantRequest" />
+            <End Role="GrantReview" EntitySet="GrantReview" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LoginHist__Perso__3A81B327" Association="Self.FK__LoginHist__Perso__3A81B327">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="LoginHistoryTable" EntitySet="LoginHistoryTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PersonAdd__Perso__3B75D760" Association="Self.FK__PersonAdd__Perso__3B75D760">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="PersonAddress" EntitySet="PersonAddress" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Community_AssistModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ContactKey" />
+          </Key>
+          <Property Name="ContactKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContactTypeKey" Type="Int32" />
+          <Property Name="PersonKey" Type="Int32" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__Contact__PersonK__300424B4" FromRole="Contact" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="GrantRequest">
+          <Key>
+            <PropertyRef Name="GrantRequestKey" />
+          </Key>
+          <Property Name="GrantRequestKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrantRequestDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PersonKey" Type="Int32" />
+          <Property Name="GrantTypeKey" Type="Int32" />
+          <Property Name="GrantRequestExplanation" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="GrantRequestAmount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="GrantType" Relationship="Self.FK__GrantRequ__Grant__34C8D9D1" FromRole="GrantRequest" ToRole="GrantType" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__GrantRequ__Perso__35BCFE0A" FromRole="GrantRequest" ToRole="Person" />
+          <NavigationProperty Name="GrantReviews" Relationship="Self.FK__GrantRevi__Grant__37A5467C" FromRole="GrantRequest" ToRole="GrantReview" />
+        </EntityType>
+        <EntityType Name="GrantReview">
+          <Key>
+            <PropertyRef Name="GrantReviewKey" />
+          </Key>
+          <Property Name="GrantReviewKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrantReviewDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="GrantRequestKey" Type="Int32" />
+          <Property Name="GrantRequestStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GrantAllocationAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="EmployeeKey" Type="Int32" />
+          <NavigationProperty Name="GrantRequest" Relationship="Self.FK__GrantRevi__Grant__37A5467C" FromRole="GrantReview" ToRole="GrantRequest" />
+        </EntityType>
+        <EntityType Name="GrantType">
+          <Key>
+            <PropertyRef Name="GrantTypeKey" />
+          </Key>
+          <Property Name="GrantTypeKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrantTypeName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="GrantTypeMaximum" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrantTypeLifetimeMaximum" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrantTypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GrantRequests" Relationship="Self.FK__GrantRequ__Grant__34C8D9D1" FromRole="GrantType" ToRole="GrantRequest" />
+        </EntityType>
+        <EntityType Name="LoginHistoryTable">
+          <Key>
+            <PropertyRef Name="LoginHistoryKey" />
+          </Key>
+          <Property Name="LoginHistoryKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonKey" Type="Int32" />
+          <Property Name="LoginTimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__LoginHist__Perso__3A81B327" FromRole="LoginHistoryTable" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonKey" />
+          </Key>
+          <Property Name="PersonKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonLastName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PersonFirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonPassWord" Type="Binary" MaxLength="500" FixedLength="false" />
+          <Property Name="PersonEntryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PersonPassWordSeed" Type="Int32" />
+          <NavigationProperty Name="Contacts" Relationship="Self.FK__Contact__PersonK__300424B4" FromRole="Person" ToRole="Contact" />
+          <NavigationProperty Name="GrantRequests" Relationship="Self.FK__GrantRequ__Perso__35BCFE0A" FromRole="Person" ToRole="GrantRequest" />
+          <NavigationProperty Name="LoginHistoryTables" Relationship="Self.FK__LoginHist__Perso__3A81B327" FromRole="Person" ToRole="LoginHistoryTable" />
+          <NavigationProperty Name="PersonAddresses" Relationship="Self.FK__PersonAdd__Perso__3B75D760" FromRole="Person" ToRole="PersonAddress" />
+        </EntityType>
+        <EntityType Name="PersonAddress">
+          <Key>
+            <PropertyRef Name="PersonAddressKey" />
+          </Key>
+          <Property Name="PersonAddressKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonAddressApt" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonAddressStreet" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonAddressCity" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonAddressState" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonAddressZip" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonKey" Type="Int32" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__PersonAdd__Perso__3B75D760" FromRole="PersonAddress" ToRole="Person" />
+        </EntityType>
+        <Association Name="FK__Contact__PersonK__300424B4">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Contact" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRequ__Grant__34C8D9D1">
+          <End Role="GrantType" Type="Self.GrantType" Multiplicity="0..1" />
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GrantType">
+              <PropertyRef Name="GrantTypeKey" />
+            </Principal>
+            <Dependent Role="GrantRequest">
+              <PropertyRef Name="GrantTypeKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRequ__Perso__35BCFE0A">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="GrantRequest">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GrantRevi__Grant__37A5467C">
+          <End Role="GrantRequest" Type="Self.GrantRequest" Multiplicity="0..1" />
+          <End Role="GrantReview" Type="Self.GrantReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GrantRequest">
+              <PropertyRef Name="GrantRequestKey" />
+            </Principal>
+            <Dependent Role="GrantReview">
+              <PropertyRef Name="GrantRequestKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LoginHist__Perso__3A81B327">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="LoginHistoryTable" Type="Self.LoginHistoryTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="LoginHistoryTable">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PersonAdd__Perso__3B75D760">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="PersonAddress" Type="Self.PersonAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="PersonAddress">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Community_AssistEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contacts" EntityType="Self.Contact" />
+          <EntitySet Name="GrantRequests" EntityType="Self.GrantRequest" />
+          <EntitySet Name="GrantReviews" EntityType="Self.GrantReview" />
+          <EntitySet Name="GrantTypes" EntityType="Self.GrantType" />
+          <EntitySet Name="LoginHistoryTables" EntityType="Self.LoginHistoryTable" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="PersonAddresses" EntityType="Self.PersonAddress" />
+          <AssociationSet Name="FK__Contact__PersonK__300424B4" Association="Self.FK__Contact__PersonK__300424B4">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Contact" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRequ__Grant__34C8D9D1" Association="Self.FK__GrantRequ__Grant__34C8D9D1">
+            <End Role="GrantType" EntitySet="GrantTypes" />
+            <End Role="GrantRequest" EntitySet="GrantRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRequ__Perso__35BCFE0A" Association="Self.FK__GrantRequ__Perso__35BCFE0A">
+            <End Role="Person" EntitySet="People" />
+            <End Role="GrantRequest" EntitySet="GrantRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GrantRevi__Grant__37A5467C" Association="Self.FK__GrantRevi__Grant__37A5467C">
+            <End Role="GrantRequest" EntitySet="GrantRequests" />
+            <End Role="GrantReview" EntitySet="GrantReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LoginHist__Perso__3A81B327" Association="Self.FK__LoginHist__Perso__3A81B327">
+            <End Role="Person" EntitySet="People" />
+            <End Role="LoginHistoryTable" EntitySet="LoginHistoryTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PersonAdd__Perso__3B75D760" Association="Self.FK__PersonAdd__Perso__3B75D760">
+            <End Role="Person" EntitySet="People" />
+            <End Role="PersonAddress" EntitySet="PersonAddresses" />
+          </AssociationSet>
+          <FunctionImport Name="usp_Login">
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Register">
+            <Parameter Name="lastname" Mode="In" Type="String" />
+            <Parameter Name="firstname" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="ApartmentNumber" Mode="In" Type="String" />
+            <Parameter Name="Street" Mode="In" Type="String" />
+            <Parameter Name="City" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="Zipcode" Mode="In" Type="String" />
+            <Parameter Name="HomePhone" Mode="In" Type="String" />
+            <Parameter Name="WorkPhone" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Community_AssistModelStoreContainer" CdmEntityContainer="Community_AssistEntities">
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="Community_AssistModel.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="ContactKey" ColumnName="ContactKey" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="ContactTypeKey" ColumnName="ContactTypeKey" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrantRequests">
+            <EntityTypeMapping TypeName="Community_AssistModel.GrantRequest">
+              <MappingFragment StoreEntitySet="GrantRequest">
+                <ScalarProperty Name="GrantRequestKey" ColumnName="GrantRequestKey" />
+                <ScalarProperty Name="GrantRequestDate" ColumnName="GrantRequestDate" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="GrantTypeKey" ColumnName="GrantTypeKey" />
+                <ScalarProperty Name="GrantRequestExplanation" ColumnName="GrantRequestExplanation" />
+                <ScalarProperty Name="GrantRequestAmount" ColumnName="GrantRequestAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrantReviews">
+            <EntityTypeMapping TypeName="Community_AssistModel.GrantReview">
+              <MappingFragment StoreEntitySet="GrantReview">
+                <ScalarProperty Name="GrantReviewKey" ColumnName="GrantReviewKey" />
+                <ScalarProperty Name="GrantReviewDate" ColumnName="GrantReviewDate" />
+                <ScalarProperty Name="GrantRequestKey" ColumnName="GrantRequestKey" />
+                <ScalarProperty Name="GrantRequestStatus" ColumnName="GrantRequestStatus" />
+                <ScalarProperty Name="GrantAllocationAmount" ColumnName="GrantAllocationAmount" />
+                <ScalarProperty Name="EmployeeKey" ColumnName="EmployeeKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrantTypes">
+            <EntityTypeMapping TypeName="Community_AssistModel.GrantType">
+              <MappingFragment StoreEntitySet="GrantType">
+                <ScalarProperty Name="GrantTypeKey" ColumnName="GrantTypeKey" />
+                <ScalarProperty Name="GrantTypeName" ColumnName="GrantTypeName" />
+                <ScalarProperty Name="GrantTypeMaximum" ColumnName="GrantTypeMaximum" />
+                <ScalarProperty Name="GrantTypeLifetimeMaximum" ColumnName="GrantTypeLifetimeMaximum" />
+                <ScalarProperty Name="GrantTypeDescription" ColumnName="GrantTypeDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginHistoryTables">
+            <EntityTypeMapping TypeName="Community_AssistModel.LoginHistoryTable">
+              <MappingFragment StoreEntitySet="LoginHistoryTable">
+                <ScalarProperty Name="LoginHistoryKey" ColumnName="LoginHistoryKey" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="LoginTimeStamp" ColumnName="LoginTimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="Community_AssistModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="PersonLastName" ColumnName="PersonLastName" />
+                <ScalarProperty Name="PersonFirstName" ColumnName="PersonFirstName" />
+                <ScalarProperty Name="PersonEmail" ColumnName="PersonEmail" />
+                <ScalarProperty Name="PersonPassWord" ColumnName="PersonPassWord" />
+                <ScalarProperty Name="PersonEntryDate" ColumnName="PersonEntryDate" />
+                <ScalarProperty Name="PersonPassWordSeed" ColumnName="PersonPassWordSeed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonAddresses">
+            <EntityTypeMapping TypeName="Community_AssistModel.PersonAddress">
+              <MappingFragment StoreEntitySet="PersonAddress">
+                <ScalarProperty Name="PersonAddressKey" ColumnName="PersonAddressKey" />
+                <ScalarProperty Name="PersonAddressApt" ColumnName="PersonAddressApt" />
+                <ScalarProperty Name="PersonAddressStreet" ColumnName="PersonAddressStreet" />
+                <ScalarProperty Name="PersonAddressCity" ColumnName="PersonAddressCity" />
+                <ScalarProperty Name="PersonAddressState" ColumnName="PersonAddressState" />
+                <ScalarProperty Name="PersonAddressZip" ColumnName="PersonAddressZip" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_Login" FunctionName="Community_AssistModel.Store.usp_Login" />
+          <FunctionImportMapping FunctionImportName="usp_Register" FunctionName="Community_AssistModel.Store.usp_Register" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
